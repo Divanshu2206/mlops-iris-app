@@ -61,7 +61,6 @@ def train_and_track_models():
                 best_model = model
                 best_run_id = mlflow.active_run().info.run_id
 
-
     # Register the best model
     if best_model:
         # Create an MLflow client instance and use it to register the model
