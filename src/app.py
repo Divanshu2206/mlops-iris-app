@@ -1,8 +1,8 @@
-import os
 import logging
 import json
 from flask import Flask, request, jsonify
 import mlflow.pyfunc
+
 
 # Set up logging to a file
 logging.basicConfig(
@@ -14,6 +14,7 @@ logging.basicConfig(
     ]
 )
 
+
 # Load the registered MLflow model
 MODEL_NAME = "IrisModel"
 try:
@@ -23,8 +24,10 @@ except Exception as e:
     logging.error(f"Failed to load model '{MODEL_NAME}': {e}")
     model = None
 
+
 # Initialize Flask app
 app = Flask(__name__)
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -35,7 +38,7 @@ def predict():
     try:
         # Get data from the POST request
         data = request.get_json(force=True)
-        
+
         # Log the incoming request
         logging.info(f"Incoming request: {json.dumps(data)}")
 
@@ -52,10 +55,12 @@ def predict():
         logging.error(f"Error during prediction: {e}")
         return jsonify({"error": str(e)}), 400
 
+
 # Expose a simple health check endpoint
 @app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({"status": "healthy"}), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -7,6 +7,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score
 import mlflow
 import mlflow.sklearn
 
+
 # Set the MLflow tracking URI to a local directory
 mlflow.set_tracking_uri("file:///../mlruns")
 os.makedirs("mlruns", exist_ok=True)
@@ -44,29 +45,31 @@ def train_and_track_models():
             accuracy = accuracy_score(y_test, y_pred)
             precision = precision_score(y_test, y_pred, average='macro')
             recall = recall_score(y_test, y_pred, average='macro')
-            
+
             mlflow.log_metric("accuracy", accuracy)
             mlflow.log_metric("precision", precision)
             mlflow.log_metric("recall", recall)
 
             # Log the model
             mlflow.sklearn.log_model(model, "iris-model")
-            
+
             print(f"Logged {model_name} with accuracy: {accuracy}")
-            
+
             # Check for the best model
             if accuracy > best_accuracy:
                 best_accuracy = accuracy
                 best_model = model
                 best_run_id = mlflow.active_run().info.run_id
 
+
     # Register the best model
     if best_model:
-        # Get the run ID of the best model
+        # Create an MLflow client instance and use it to register the model
         client = mlflow.tracking.MlflowClient()
         source_uri = f"runs:/{best_run_id}/iris-model"
-        mlflow.register_model(model_uri=source_uri, name="IrisModel")
+        client.register_model(model_uri=source_uri, name="IrisModel")
         print(f"\nBest model (with accuracy {best_accuracy}) registered as 'IrisModel'.")
+
 
 if __name__ == '__main__':
     train_and_track_models()
