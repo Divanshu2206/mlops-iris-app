@@ -8,14 +8,15 @@ import mlflow
 import mlflow.sklearn
 
 # Set the MLflow tracking URI to a local directory
-mlflow.set_tracking_uri("file:///mlruns")
+mlflow.set_tracking_uri("file:///../mlruns")
 os.makedirs("mlruns", exist_ok=True)
+
 
 def train_and_track_models():
     """Trains two models, tracks them with MLflow, and registers the best one."""
 
     # Load the preprocessed data
-    df = pd.read_csv('data/iris.csv')
+    df = pd.read_csv('./../data/iris.csv')
     X = df.drop('target', axis=1)
     y = df['target']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)

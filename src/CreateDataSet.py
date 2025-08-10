@@ -13,5 +13,5 @@ df = pd.DataFrame(data=X, columns=iris.feature_names)
 df['target'] = y
 
 # Save the preprocessed data to the 'data' directory
-df.to_csv('data/iris.csv', index=False)
+df.to_csv('./../data/iris.csv', index=False)
 print("Dataset saved to data/iris.csv")
